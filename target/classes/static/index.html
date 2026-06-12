@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valle Digital · Tienda de Ropa Infantil — Módulo de Compras</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- NAV -->
+    <nav class="top-nav">
+        <div class="nav-logo">
+            <div class="nav-logo-icon">
+                <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+            </div>
+            VALLE DIGITAL
+            <span>tienda piloto · Cajamarca</span>
+        </div>
+        <div class="nav-modules">
+            <div class="nav-mod">Dashboard</div>
+            <div class="nav-mod">Productos</div>
+            <div class="nav-mod">Inventario</div>
+            <div class="nav-mod active">Compras</div>
+            <div class="nav-mod">Ventas</div>
+            <div class="nav-mod">Historial</div>
+        </div>
+        <div class="nav-user">
+            <div class="nav-user-badge">
+                <div class="nav-user-avatar">JD</div>
+                <div class="nav-user-info">
+                    <div class="nav-user-name">Juan David</div>
+                    <div class="nav-user-role">Desarrollador</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BARRA DE ESTADO -->
+    <div class="system-status">
+        <div class="status-dot"></div>
+        <span class="status-text">Sistema Activo</span>
+        <span class="status-divider">|</span>
+        <span id="statusDate">Cargando fecha...</span>
+        <span class="status-divider">|</span>
+        <span class="status-model">Modelo XGBoost v2.1</span>
+        <span class="status-badge">Cargado</span>
+    </div>
+
+    <div class="workspace">
+
+        <!-- BANNER -->
+        <div class="page-hero">
+            <div class="hero-content">
+                <div class="hero-tag">Machine Learning · XGBoost</div>
+                <div class="hero-title">Predicción de Demanda · Retail Infantil</div>
+                <div class="hero-subtitle">
+                    Sistema basado en XGBoost que analiza el historial de ventas y la estacionalidad para recomendar cuánto pedir <strong>este mes</strong> para cubrir la demanda del <strong>mes siguiente</strong>.
+                </div>
+            </div>
+            <div class="hero-illustration">
+                <div class="hero-heart"></div>
+                <img class="hero-heart-img" src="https://i.imgur.com/qnDVikb.jpg" alt="Bebé">
+            </div>
+        </div>
+
+        <!-- FILTROS -->
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <h2>Nueva Orden de Compra</h2>
+                </div>
+                <div class="card-header-actions">
+                    <button id="btnCalcular" class="btn btn-primary" type="button">Calcular Demanda</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="controls-row">
+                    <div class="form-col">
+                        <label>Rango de meses a cubrir</label>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <select id="mesDesde" class="mes-select" disabled>
+                                <option value="1">Enero</option>
+                                <option value="2">Febrero</option>
+                                <option value="3">Marzo</option>
+                                <option value="4">Abril</option>
+                                <option value="5">Mayo</option>
+                                <option value="6">Junio</option>
+                                <option value="7">Julio</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Septiembre</option>
+                                <option value="10">Octubre</option>
+                                <option value="11">Noviembre</option>
+                                <option value="12">Diciembre</option>
+                            </select>
+                            <span style="color:var(--text-muted); font-size:12px; font-weight:700;">→</span>
+                            <select id="mesHasta" class="mes-select">
+                                <option value="1">Enero</option>
+                                <option value="2">Febrero</option>
+                                <option value="3">Marzo</option>
+                                <option value="4">Abril</option>
+                                <option value="5">Mayo</option>
+                                <option value="6">Junio</option>
+                                <option value="7">Julio</option>
+                                <option value="8">Agosto</option>
+                                <option value="9">Septiembre</option>
+                                <option value="10">Octubre</option>
+                                <option value="11">Noviembre</option>
+                                <option value="12">Diciembre</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-col" style="flex:1;">
+                        <label>Categorías a Solicitar</label>
+                        <div class="chips-wrap">
+                            <label class="chip" data-value="ROPA BEBE"><input type="checkbox">Ropa Bebé</label>
+                            <label class="chip" data-value="ROPA NIÑA"><input type="checkbox">Ropa Niña</label>
+                            <label class="chip" data-value="ROPA NIÑO"><input type="checkbox">Ropa Niño</label>
+                            <label class="chip" data-value="CALZADO"><input type="checkbox">Calzado</label>
+                            <label class="chip" data-value="NIÑO/NIÑA"><input type="checkbox">Niño/Niña</label>
+                            <label class="chip" data-value="ACCESORIOS PARA BEBE"><input type="checkbox">Acc. Bebé</label>
+                            <label class="chip" data-value="ACCESORIOS NIÑAS"><input type="checkbox">Acc. Niñas</label>
+                            <label class="chip" data-value="ACCESORIOS NIÑOS"><input type="checkbox">Acc. Niños</label>
+                            <label class="chip" data-value="ACCESORIOS NIÑO/NIÑA"><input type="checkbox">Acc. Niño/Niña</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ESTADO VACÍO -->
+        <div id="emptyState" class="card empty-state">
+            <svg width="56" height="56" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="color:var(--primary); margin-bottom:20px; opacity:0.4;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 1H1z"></path></svg>
+            <p style="font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 8px;">Aún no hay sugerencias generadas</p>
+            <p style="font-size: 13px; max-width: 400px; margin: 0 auto;">Seleccione el período y al menos una categoría, luego pulse <strong>"Calcular Demanda"</strong>.</p>
+        </div>
+
+        <!-- ESTADO CARGANDO -->
+        <div id="loadingState" class="card loading-state hidden">
+            <div class="spinner"></div>
+            <p style="font-size: 15px; font-weight: 700; color: var(--dark);">Ejecutando modelo XGBoost...</p>
+            <p style="font-size: 13px; margin-top: 6px; color: var(--text-muted);">Analizando estacionalidad</p>
+        </div>
+
+        <!-- RESULTADOS -->
+        <div id="resultsWrapper" class="hidden">
+
+            <div class="flujo-banner">
+                <svg width="18" height="18" fill="none" stroke="#f472b6" stroke-width="2.2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                <span id="flujoBannerTexto" class="flujo-banner-texto"></span>
+            </div>
+
+            <div class="kpi-grid">
+                <div class="kpi-box animate-in stagger-1">
+                    <div class="kpi-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg></div>
+                    <div class="kpi-label">Demanda Estimada</div>
+                    <div class="kpi-val" id="kpiDemanda">0</div>
+                    <div class="kpi-sub" id="kpiSubObjetivo">Para el mes a cubrir</div>
+                </div>
+                <div class="kpi-box animate-in stagger-2">
+                    <div class="kpi-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016"></path></svg></div>
+                    <div class="kpi-label">Stock Seguridad</div>
+                    <div class="kpi-val" id="kpiStock">0</div>
+                    <div class="kpi-sub">Margen 15%</div>
+                </div>
+                <div class="kpi-box highlight animate-in stagger-3">
+                    <div class="kpi-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg></div>
+                    <div class="kpi-label">Cantidad a Pedir</div>
+                    <div class="kpi-val" id="kpiRecomendacion">0</div>
+                    <div class="kpi-sub">Recomendación</div>
+                </div>
+                <div class="kpi-box animate-in stagger-4">
+                    <div class="kpi-icon"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg></div>
+                    <div class="kpi-label">Productos</div>
+                    <div class="kpi-val" id="kpiProductos">0</div>
+                    <div class="kpi-sub" id="kpiSubPedido">Pedido: —</div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 0;">
+                <div class="card-header" style="background:#fff;">
+                    <div>
+                        <h2 style="font-size:16px;">Detalle de Productos Sugeridos</h2>
+                        <p id="tablaSubtitulo">Revise y ajuste las cantidades antes de confirmar.</p>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Producto</th>
+                                <th>Sugerencia</th>
+                                <th>Final</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyProductos"></tbody>
+                    </table>
+                </div>
+
+                <div class="table-footer">
+                    <div class="footer-info">
+                        <div style="margin-bottom: 8px; font-weight: 800; color: var(--dark); font-size: 14px;">Resumen Orden de Compra</div>
+                        <div>Total Sugerido: <strong id="valSugerido">0</strong> unidades</div>
+                        <div>Total Ajustado: <strong id="valAjustado">0</strong> unidades <span id="difTexto">(Sin modificaciones)</span></div>
+                    </div>
+                    <button id="btnOrdenar" class="btn btn-success" disabled onclick="generarOrden()">Confirmar Orden</button>
+                </div>
+
+                <div id="ordenExito" class="success-msg hidden" style="margin: 0 28px 28px;"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="js/app.js"></script>
+    
+    <!-- Script para el cuadrito de Sugerencia -->
+    <script>
+        function aplicarEstiloSugerencia() {
+            const celdas = document.querySelectorAll('.data-table tbody tr:not(.cat-sep) td:nth-child(3)');
+            celdas.forEach(td => {
+                const valor = td.innerText.trim();
+                if(valor && !td.querySelector('.suggestion-badge')) {
+                    td.innerHTML = `<span class="suggestion-badge">${valor}</span>`;
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            aplicarEstiloSugerencia();
+
+            const targetNode = document.getElementById('tbodyProductos');
+            if (targetNode) {
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.type === 'childList') {
+                            aplicarEstiloSugerencia();
+                        }
+                    });
+                });
+                observer.observe(targetNode, { childList: true });
+            }
+        });
+    </script>
+</body>
+</html>

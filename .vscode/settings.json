@@ -1,0 +1,7 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.lombok.enable": true,
+    "java.autobuild.enabled": true,
+    "java.dependencies.packagePresent": true
+}

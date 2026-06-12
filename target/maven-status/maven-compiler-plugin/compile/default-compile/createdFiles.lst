@@ -1,0 +1,12 @@
+com\tesis\service\PrediccionService$2.class
+com\tesis\MicroservicioPredictivoApplication.class
+com\tesis\model\LogPrediccion.class
+com\tesis\service\PrediccionService$1.class
+com\tesis\dto\PrediccionResponse.class
+com\tesis\dto\DetalleProductoDTO.class
+com\tesis\service\PrediccionService$4.class
+com\tesis\dto\PrediccionRequest.class
+com\tesis\dto\PrediccionDetalleResponse.class
+com\tesis\service\PrediccionService.class
+com\tesis\controller\PrediccionController.class
+com\tesis\service\PrediccionService$3.class
